@@ -16,11 +16,10 @@ route: /cars || /cars/{id}
 ```
 
 ## UML Diagram
-![Serverless API UML Diagram](./public/images/serverless-api.png)
+![CAPS Cloud - AWS SNS & SQS UML Diagram](./public/images/caps-cloud.png)
 
 ## PR link
-[GET Request PR link](https://github.com/cleecoloma/serverless-api-get/pulls)
+[PR link](https://github.com/cleecoloma/serverless-api-get/pulls)
 
 ## Contributors
 * Chester Lee Coloma
-* ChatGPT helped with the tests
