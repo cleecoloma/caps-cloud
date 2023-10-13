@@ -1,7 +1,7 @@
 'use strict';
 
-// const Chance = require('chance');
-// const chance = new Chance();
+const Chance = require('chance');
+const chance = new Chance();
 const { Consumer } = require('sqs-consumer');
 const { SQSClient } = require('@aws-sdk/client-sqs');
 const AWS = require('aws-sdk');
@@ -16,12 +16,10 @@ const queueUrl =
 function checkPickup() {
   const app = Consumer.create({
     queueUrl,
-    checkMessage: async (message) => {
+    handleMessage: async (message) => {
       let messageBody = JSON.parse(message.Body);
-      console.log('WE HAVE A NEW MESSAGE!', messageBody);
-      const timeoutMs = 5000;
-      setTimeout(null, timeoutMs);
-      postDelivered(messageBody);
+      console.log('We have a pickup notification!', messageBody.Message);
+      setInterval(postDelivered(messageBody), 5000);
     },
     sqs: new SQSClient({
       region: 'us-west-2',
@@ -35,18 +33,12 @@ function checkPickup() {
   app.start();
 }
 
-checkPickup();
-
-function postDelivered(payload) {
-  let { orderId, customer } = payload;
+function postDelivered(load) {
+  console.log("Posting delivery notification!")
+  let { orderId, customer } = JSON.parse(load.Message);
   const payload = {
     Subject: 'Delivered',
     Message: `Order ${orderId} for Customer ${customer} has been delivered!`,
-    // JSON.stringify({
-    //   orderId,
-    //   customer,
-    //   vendorUrl: 'https://sqs.us-west-2.amazonaws.com/749908888189/vendor',
-    // }),
     TopicArn: topic,
   };
 
@@ -61,5 +53,4 @@ function postDelivered(payload) {
     });
 }
 
-// setInterval(postDelivered, 5000);
-// postDelivered();
+checkPickup();

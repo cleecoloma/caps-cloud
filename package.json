@@ -4,7 +4,9 @@
   "description": "> This repository implements a cloud version of the Code Academy Parcel Service (CAPS) system using AWS services: Simple Queue Service (SQS) and Simple Notification Service (SNS)",
   "main": "driver.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vendor": "node vendor.js",
+    "driver": "node driver.js"
   },
   "keywords": [],
   "author": "",

@@ -21,6 +21,8 @@ function createPickup() {
       vendorUrl: 'https://sqs.us-west-2.amazonaws.com/749908888189/vendor',
     }),
     TopicArn: topic,
+    MessageGroupId: chance.guid(),
+    MessageDeduplicationId: chance.guid(),
   };
 
   sns
@@ -34,15 +36,13 @@ function createPickup() {
     });
 }
 
-// setInterval(createPickup, 5000);
-createPickup();
-
 function checkDelivered() {
+  console.log('Checking if orders got delivered!');
   const app = Consumer.create({
     queueUrl,
-    checkMessage: async (message) => {
+    handleMessage: async (message) => {
       let messageBody = JSON.parse(message.Body);
-      console.log('WE HAVE A NEW MESSAGE!', messageBody);
+      console.log('We got a delivery notification!', messageBody.Message);
     },
     sqs: new SQSClient({
       region: 'us-west-2',
@@ -57,3 +57,4 @@ function checkDelivered() {
 }
 
 checkDelivered();
+setInterval(createPickup, 5000);
